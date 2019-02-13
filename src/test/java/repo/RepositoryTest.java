@@ -31,7 +31,7 @@ public class RepositoryTest {
 		BoxerModel model1 = new BoxerModel("Dale Salford","Active", 29, "09/09/1990", "Mexican", "Lightweight", "orthodox", "los Angeles, USA", "los Angeles, USA");
 		entityManager.persist(model1);
 		entityManager.flush();
-		assertTrue(MyRepo.findById(model1.getId()).isPresent()); 
+		assertTrue(MyRepo.findById(model1.getId()).isPresent());
 	}
 
 }

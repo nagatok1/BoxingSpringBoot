@@ -69,23 +69,6 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void findingAndRetrievingChampionFromDatabase() throws Exception {
-		myrepo2.save(new ChampionModel("Dale Salford", "Middleweight", "World Test Title"));
-		mvc.perform(get("/api/champions/allchampions").contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$[0].boxer", is("Dale Salford")));
-	}
-
-	@Test
-	public void addAChampionToDatabaseTest() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.post("/api/champions/createchampion").contentType(MediaType.APPLICATION_JSON)
-				.content(
-						"{\"boxer\" : \"Robert Dawson\",\"weightclass\" : \"Heavyweight\", \"title\" : \"World Test Title\"}"))
-				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.boxer", is("Robert Dawson")));
-	}
-
-	@Test
 	public void DeleteBoxerFromDatabaseTest() throws Exception {
 		myrepo.save(new BoxerModel("Dale Salford", "Active", 29, "09/09/1990", "Mexican", "Lightweight", "orthodox",
 				"los Angeles, USA", "los Angeles, USA"));
@@ -108,20 +91,34 @@ public class IntegrationTest {
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$.name", is("Burger Johnson"))); 
-//		
-//		myrepo.save(new BoxerModel("Dale Salford", "Active", 29, "09/09/1990", "Mexican", "Lightweight", "orthodox",
-//				"los Angeles, USA", "los Angeles, USA"));
-//		
-//		BoxerModel boxer2 = new BoxerModel("Robert Dawson", "Active", 29, "09/09/1990", "Mexican", "Lightweight", "orthodox",
-//				"los Angeles, USA", "los Angeles, USA");
-//		
-//		mvc.perform(MockMvcRequestBuilders.put("/api/boxers/1").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(boxer2)));
-//		
-//		mvc.perform(get("/api/boxers/allboxers").contentType(MediaType.APPLICATION_JSON))
-//						.andExpect(status().isOk()).andExpect(jsonPath("$[3].name", is("Robert Dawson")));
 
 	}
 	
+	@Test
+	public void addAChampionToDatabaseTest() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post("/api/champions/createchampion").contentType(MediaType.APPLICATION_JSON)
+				.content(
+						"{\"boxer\" : \"Robert Dawson\",\"weightclass\" : \"Heavyweight\", \"title\" : \"World Test Title\"}"))
+				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.boxer", is("Robert Dawson")));
+	}
+	
+	@Test
+	public void findingAndRetrievingChampionFromDatabase() throws Exception {
+		myrepo2.save(new ChampionModel("Dale Salford", "Middleweight", "World Test Title"));
+		mvc.perform(get("/api/champions/allchampions").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$[0].boxer", is("Dale Salford")));
+	}
+	
+	@Test
+	public void DeleteChampionFromDatabaseTest() throws Exception {
+		ChampionModel champ = new ChampionModel ("Jordan Jo", "Middleweight", "World Test Title");
+		myrepo2.save(champ);
+		mvc.perform(MockMvcRequestBuilders.delete("/api/champions/" + champ.getTitleid()).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+
+}
 	@Test
 	public void UpdateChampioninDatabaseTest() throws Exception {
 		
@@ -137,5 +134,4 @@ public class IntegrationTest {
 				.andExpect(jsonPath("$.boxer", is("Gundar Gunson")));
 		
 	}
-
 }
